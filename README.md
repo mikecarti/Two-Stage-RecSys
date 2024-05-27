@@ -3,7 +3,11 @@ A Two Stage Recommender System for Retail. (LFM, KNN, CatBoost and Other Heurist
 
 
 ## Running:
+Install docker and nvidia-container-runtime, then run in the shell:
+
 ```commandline
 docker build -t recsys .
-docker run -it -p 8000:8000 recsys /bin/bash
+docker run --name recsys -p 80:80 recsys
+docker exec -it recsys /bin/bash
 ```
+
