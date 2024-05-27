@@ -7,8 +7,8 @@ from typing import Iterable
 from loguru import logger
 from scipy.sparse import csr_matrix
 
-from models.core import BaseModel
-from utils import user_purchases_from_sparse_optimized
+from app.models.base.core import BaseModel
+from app.utils import user_purchases_from_sparse_optimized
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 

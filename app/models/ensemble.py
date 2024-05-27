@@ -2,25 +2,20 @@ from __future__ import annotations
 
 import warnings
 
-from models.lfm import MatrixFactorization
-from models.neighbor import User2User
-from models.popularity import PopModel
-from models.user_history import UserHistoryModel
-from utils import all_user_purchases_from_sparse, mapk
-
-warnings.simplefilter(action='ignore', category=FutureWarning)
-
-
+from app.models.base.lfm import MatrixFactorization
+from app.models.base.neighbor import User2User
+from app.models.base.popularity import PopModel
+from app.models.base.user_history import UserHistoryModel
+from app.utils import all_user_purchases_from_sparse, mapk
 import numpy as np
 import time
-
 from scipy.sparse import coo_matrix
 from typing import Iterable, Dict
 from loguru import logger
-
 from scipy.sparse import csr_matrix
-
 import gc
+
+warnings.simplefilter(action='ignore', category=FutureWarning)
 
 
 class ModelEnsemble:

@@ -1,7 +1,7 @@
 import warnings
 from typing import List
 
-from models.core import BaseModel
+from app.models.base.core import BaseModel
 from catboost import CatBoostClassifier
 
 

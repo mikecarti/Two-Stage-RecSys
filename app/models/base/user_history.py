@@ -1,6 +1,6 @@
 from __future__ import annotations
 import warnings
-from models.core import BaseModel
+from app.models.base.core import BaseModel
 import numpy as np
 from loguru import logger
 from scipy.sparse import csr_matrix

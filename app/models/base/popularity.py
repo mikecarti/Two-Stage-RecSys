@@ -4,7 +4,7 @@ import numpy as np
 from typing import Iterable
 from scipy.sparse import csr_matrix
 
-from models.core import BaseModel
+from app.models.base.core import BaseModel
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 

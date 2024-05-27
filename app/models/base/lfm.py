@@ -2,7 +2,7 @@ from __future__ import annotations
 import warnings
 from lightfm import LightFM
 from lightfm.evaluation import precision_at_k as lightfm_precision_at_k
-from models.core import BaseModel
+from app.models.base.core import BaseModel
 import numpy as np
 import pickle
 from scipy.sparse import coo_matrix

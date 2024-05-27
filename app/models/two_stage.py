@@ -1,11 +1,10 @@
 import warnings
 
-from models.core import BaseModel
-from models.ensemble import ModelEnsemble
-from models.rerank import Reranker
+from app.models.base.core import BaseModel
+from app.models.ensemble import ModelEnsemble
+from app.models.rerank import Reranker
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
-
 
 import numpy as np
 from typing import Iterable, Dict

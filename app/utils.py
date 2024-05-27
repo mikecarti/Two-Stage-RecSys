@@ -93,6 +93,7 @@ def mapk(actual, predicted, k=10):
     """
     return np.mean([apk(a, p, k) for a, p in zip(actual, predicted)])
 
+
 def set_seed(seed: int = 42) -> None:
     import random
     import os
@@ -127,6 +128,7 @@ def long_to_csr(df: pl.DataFrame) -> (csr_matrix, (np.array, np.array)):
 
     return csr, (np.array(users).flatten(), np.array(items).flatten())
 
-def take_frac_of_data(df: pl.DataFrame, frac = 0.5):
+
+def take_frac_of_data(df: pl.DataFrame, frac=0.5):
     df = df.sort("user_id")
     return df.head(int(df.shape[0] * frac))

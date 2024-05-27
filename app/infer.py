@@ -2,15 +2,15 @@ from typing import List
 from pydantic import BaseModel
 import numpy as np
 from fastapi import FastAPI
-from train import train
+from app.train import train
 
 
 class PredictRequest(BaseModel):
-    user_ids: np.array
+    user_ids: list[int]
 
 
 class PredictResponse(BaseModel):
-    predictions: np.ndarray
+    predictions: list[float]
 
 
 class Inference:
@@ -30,9 +30,9 @@ app = FastAPI()
 
 
 @app.post("/predict", response_model=PredictResponse)
-def predict(request: PredictRequest):
+def predict(request: PredictRequest) -> PredictResponse:
     predictions = inference.predict(np.array(request.user_ids))
-    return PredictResponse(predictions=predictions)
+    return PredictResponse(predictions=predictions.tolist())
 
 
 if __name__ == "__main__":
