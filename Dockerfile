@@ -8,4 +8,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY app .
 
-CMD ["fastapi", "run", "infer.py", "--port", "80"]
+CMD ["fastapi", "dev", "infer.py", "--port", "80"]

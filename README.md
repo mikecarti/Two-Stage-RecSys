@@ -11,3 +11,8 @@ docker run --name recsys -p 80:80 recsys
 docker exec -it recsys /bin/bash
 ```
 
+## Run from image:
+```commandline
+
+```
+
