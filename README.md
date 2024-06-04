@@ -17,6 +17,11 @@ docker run --name recsys -p 80:80 recsys
 docker exec -it recsys /bin/bash
 ```
 
+## Restart 
+```commandline
+docker stop recsys && docker rm recsys && docker build . -t recsys && docker run --name recsys -p 80:80 recsys
+```
+
 ## Run from image:
 ```commandline
 docker load -i recsys_image.tar

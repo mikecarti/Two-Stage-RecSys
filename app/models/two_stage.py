@@ -9,6 +9,29 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 import numpy as np
 from typing import Iterable, Dict
 from loguru import logger
+from app.models.base.popularity import PopModel
+from app.models.base.user_history import UserHistoryModel
+from app.models.base.lfm import MatrixFactorization
+from app.models.base.neighbor import User2User
+from app.models.rerank import Reranker
+from app.models.ensemble import ModelEnsemble
+
+POP_PATH = "model_files/pop_model.csv"
+
+HIST_PATH = "model_files/user_history_model.npz"
+HIST_MAP_PATH = "model_files/user_history_map.pkl"
+
+MF_PATH = "model_files/mf_model.pickle"
+MF_USER_MAP_PATH = "model_files/mf_user_mapping.pkl"
+MF_ITEM_MAP_PATH = "model_files/mf_item_mapping.pkl"
+MF_ITEM_IDS_PATH = "model_files/mf_item_ids.pkl"
+
+U2U_PATH = "model_files/knn.index"
+U2U_ITEMS_PATH = "model_files/u2u_item_ids.pkl"
+U2U_MAP_PATH = "model_files/u2u_mapping.pkl"
+U2U_SPARSE_PATH = "model_files/u2u_sparse_data_fitted.npz"
+
+CTB_PATH = "model_files/ctb_model.dill"
 
 
 def batch(iterable, n=1):
@@ -85,3 +108,23 @@ class TwoStageModel(BaseModel):
         assert all_ranks.shape == (n_users * n_items, 4), f"Shape of all_ranks: {all_ranks.shape}"
         logger.info("Inferencing Catboost")
         return self.reranker.predict_proba(all_ranks)
+
+    @classmethod
+    def load(cls):
+        popularity = PopModel.load(POP_PATH)
+        history = UserHistoryModel.load(HIST_PATH, HIST_MAP_PATH)
+        lfm = MatrixFactorization.load(MF_PATH, MF_USER_MAP_PATH, MF_ITEM_MAP_PATH,
+                                       MF_ITEM_IDS_PATH)
+        neighbor = User2User.load(U2U_PATH, U2U_MAP_PATH, U2U_ITEMS_PATH, U2U_SPARSE_PATH)
+
+        base_models = {
+            "Popularity Based Model": popularity,
+            "User History Model": history,
+            "Matrix Factorization": lfm,
+            "User2User": neighbor
+        }
+
+        ensemble = ModelEnsemble(base_models)
+        reranker = Reranker.load(CTB_PATH)
+        logger.info('all models loaded')
+        return TwoStageModel(ensemble, reranker)

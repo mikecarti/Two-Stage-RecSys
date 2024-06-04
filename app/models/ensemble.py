@@ -36,10 +36,10 @@ class ModelEnsemble:
             if model_name not in self.models:
                 logger.warning(f"Model {model_name} is not passed to initializer")
 
-        self.pop_model = self.models.get("Popularity Based Model")
-        self.history_model = self.models.get("User History Model")
-        self.mf_model = self.models.get("Matrix Factorization")
-        self.knn_model = self.models.get("User2User")
+        self.pop_model: PopModel = self.models.get("Popularity Based Model")
+        self.history_model: UserHistoryModel = self.models.get("User History Model")
+        self.mf_model: MatrixFactorization = self.models.get("Matrix Factorization")
+        self.knn_model: User2User = self.models.get("User2User")
 
         if self.knn_model.user_embeddings is None:
             self.knn_model.user_embeddings = np.array(self.mf_model.get_latent_users())
@@ -94,24 +94,11 @@ class ModelEnsemble:
 
         return predictions
 
-    #     @staticmethod
-    #     def _gather_top_k(ranks: np.ndarray | csr_matrix, item_ids: Iterable, k: int, chunk_size: int = 100000) -> np.ndarray:
-    #         assert isinstance(ranks, np.ndarray)
-    #         n_users = ranks.shape[0]
-
-    #         top_k_indices = np.empty((n_users, k), dtype=np.int32)
-
-    #         for start in range(0, n_users, chunk_size):
-    #             end = min(start + chunk_size, n_users)
-    #             chunk_top_k_indices = np.argpartition(ranks[start:end, :].astype(np.float32), -k, axis=1)[:, -k:]
-    #             top_k_indices[start:end, :] = chunk_top_k_indices
-
-    #         # Perform 2D indexing along axis=1
-    #         item_id_tile = np.broadcast_to(item_ids, (n_users, len(item_ids)))
-    #         row_indices = np.arange(n_users)[:, None]
-    #         logger.debug("top k ranks gathered")
-
-    #         return np.take_along_axis(item_id_tile, top_k_indices, axis=1)
+    def get_item_ids(self):
+        item_ids_mf = self.mf_model.item_ids_fitted
+        item_ids_knn = self.knn_model.item_ids
+        assert np.array_equal(item_ids_mf, item_ids_knn)
+        return item_ids_mf
 
     @staticmethod
     def evaluate(ranks_pred: np.ndarray, ranks_true: np.ndarray,
