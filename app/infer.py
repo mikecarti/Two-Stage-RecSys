@@ -40,6 +40,7 @@ class Inference:
     MF_PATH = "model_files/mf_model.pickle"
     MF_USER_MAP_PATH = "model_files/mf_user_mapping.pkl"
     MF_ITEM_MAP_PATH = "model_files/mf_item_mapping.pkl"
+    MF_ITEM_IDS_PATH = "model_files/mf_item_ids.pkl"
 
     U2U_PATH = "model_files/knn.index"
     U2U_ITEMS_PATH = "model_files/u2u_item_ids.pkl"
@@ -50,7 +51,7 @@ class Inference:
 
     def __init__(self):
         self.model = self._init_models()
-        test_pred = self.predict([1,2,3,4])
+        test_pred = self.predict(np.array([1,2,3,4]))
         logger.info(f"Test preditions were made: {test_pred}")
 
     def train_inference(self) -> bool:
@@ -75,7 +76,7 @@ class Inference:
     def _init_models(self):
         popularity = PopModel.load(self.POP_PATH)
         history = UserHistoryModel.load(self.HIST_PATH, self.HIST_MAP_PATH)
-        lfm = MatrixFactorization.load(self.MF_PATH, self.MF_USER_MAP_PATH, self.MF_ITEM_MAP_PATH)
+        lfm = MatrixFactorization.load(self.MF_PATH, self.MF_USER_MAP_PATH, self.MF_ITEM_MAP_PATH, self.MF_ITEM_IDS_PATH)
         neighbor = User2User.load(self.U2U_PATH, self.U2U_MAP_PATH, self.U2U_ITEMS_PATH, self.U2U_SPARSE_PATH)
 
         base_models = {

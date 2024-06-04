@@ -41,6 +41,9 @@ class ModelEnsemble:
         self.mf_model = self.models.get("Matrix Factorization")
         self.knn_model = self.models.get("User2User")
 
+        if self.knn_model.user_embeddings is None:
+            self.knn_model.user_embeddings = np.array(self.mf_model.get_latent_users())
+
     def fit(self, data: coo_matrix, user_ids: Iterable, item_ids: Iterable) -> ModelEnsemble:
         simple_fit_models = [(k, v) for k, v in self.models.items() if k != "User2User"]
         assert data.shape == (len(user_ids), len(item_ids))

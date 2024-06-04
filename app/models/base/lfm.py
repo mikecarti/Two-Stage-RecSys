@@ -74,7 +74,7 @@ class MatrixFactorization(BaseModel):
         return prec
 
     @classmethod
-    def load(cls, pickle_path: str, user_map_path, item_map_path):
+    def load(cls, pickle_path: str, user_map_path, item_map_path, item_ids_path):
         logger.info("LFM loading...")
         mf = MatrixFactorization()
         with open(pickle_path, 'rb') as f:
@@ -85,4 +85,6 @@ class MatrixFactorization(BaseModel):
 
         with open(item_map_path, 'rb') as f:
             mf.item_id_to_index = pickle.load(f)
+
+        mf.item_ids_fitted = np.load(item_ids_path, allow_pickle=True)
         return mf
