@@ -72,3 +72,17 @@ class MatrixFactorization(BaseModel):
         prec = self.precision(self.model, test_data, k=k)
         print(f"Train precision at {k}: %.2f" % prec.mean())
         return prec
+
+    @classmethod
+    def load(cls, pickle_path: str, user_map_path, item_map_path):
+        logger.info("LFM loading...")
+        mf = MatrixFactorization()
+        with open(pickle_path, 'rb') as f:
+            mf.model = pickle.load(f)
+
+        with open(user_map_path, 'rb') as f:
+            mf.user_id_to_index = pickle.load(f)
+
+        with open(item_map_path, 'rb') as f:
+            mf.item_id_to_index = pickle.load(f)
+        return mf

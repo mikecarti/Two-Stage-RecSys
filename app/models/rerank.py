@@ -380,3 +380,11 @@ class Reranker:
     def save(self):
         with open(f"ctb_model.dill", 'wb') as f:
             dill.dump(self.ctb_model, f)
+
+    @classmethod
+    def load(cls, path_to_ctb: str):
+        model = Reranker()
+        with open(path_to_ctb, 'rb') as f:
+            ctb = dill.load(f)
+        model.ctb_model = ctb
+        return model

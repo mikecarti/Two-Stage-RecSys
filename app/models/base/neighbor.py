@@ -6,9 +6,10 @@ import pickle
 from typing import Iterable
 from loguru import logger
 from scipy.sparse import csr_matrix
-
+from faiss import write_index, read_index
 from app.models.base.core import BaseModel
 from app.utils import user_purchases_from_sparse_optimized
+import scipy
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
@@ -76,11 +77,8 @@ class User2User(BaseModel):
         return all_users_ranks
 
     def save(self):
-        path = "knnpickle_file"
-        knn_pickle = open('knnpickle_file', 'wb')
-        pickle.dump(self.model, knn_pickle)
-        knn_pickle.close()
-        logger.info(f"KNN Model was saved with name {path}")
+        path = "large.index"
+        write_index(self.model.index, path)
 
     def _find_and_rank_neighbors(self, similar_users: np.array, rank_positions: np.array):
         ranks_for_users = np.zeros((len(similar_users), len(self.item_ids)))
@@ -96,6 +94,22 @@ class User2User(BaseModel):
                                                                                       self.item_ids, user_index,
                                                                                       return_index=True)
         return similar_user_item_indices, n_purchases.flatten()
+
+    @classmethod
+    def load(cls, index_path: str, user_map_path, item_ids_path, fitted_sparse_path):
+        logger.info("PopModel loading...")
+        knn = User2User()
+        knn.model.index = read_index(index_path)
+
+        with open(user_map_path, 'rb') as f:
+            knn.user_id_to_index = pickle.load(f)
+
+        knn.item_ids = np.load(item_ids_path, allow_pickle=True)
+        knn.sparse_data_fitted = scipy.sparse.load_npz(fitted_sparse_path)
+
+        return knn
+
+
 
 # # Wall time 3:40
 # %time knn_model = User2User().fit(debug_set_csr, item_ids, user_ids, user_emb)

@@ -1,9 +1,12 @@
 from __future__ import annotations
+
+import pickle
 import warnings
 from app.models.base.core import BaseModel
 import numpy as np
 from loguru import logger
 from scipy.sparse import csr_matrix
+import scipy
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 
@@ -56,3 +59,13 @@ class UserHistoryModel(BaseModel):
             user_data_chunk[non_null_users_mask, :] = user_data_pred_chunk.toarray()
 
         return user_data
+
+    @classmethod
+    def load(cls, train_matrix_path: str, user_map_path: str):
+        logger.info("User history loading...")
+        model = UserHistoryModel()
+        model.train_data = scipy.sparse.load_npz(train_matrix_path)
+
+        with open(user_map_path, 'rb') as f:
+            model.user_ids_to_index = pickle.load(f)
+        return model

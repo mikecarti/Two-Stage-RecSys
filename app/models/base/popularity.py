@@ -3,6 +3,7 @@ import warnings
 import numpy as np
 from typing import Iterable
 from scipy.sparse import csr_matrix
+from loguru import logger
 
 from app.models.base.core import BaseModel
 
@@ -10,9 +11,9 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 
 
 class PopModel(BaseModel):
-    def __init__(self):
+    def __init__(self, n_items=6562):
         self.ranks = None
-        self.n_items = None
+        self.n_items = n_items
 
     def fit(self, sparse_data: csr_matrix, item_ids: np.array, user_ids: np.array) -> PopModel:
         _ = user_ids
@@ -42,3 +43,10 @@ class PopModel(BaseModel):
         assert ranks_broadcasted.shape == (1, n_items)
 
         return np.broadcast_to(ranks_broadcasted, (n_users, n_items))
+
+    @classmethod
+    def load(cls, data_1d_path: str):
+        logger.info("PopModel loading...")
+        model = PopModel()
+        model.ranks = np.genfromtxt(data_1d_path, delimiter="\n")
+        return model
