@@ -56,7 +56,7 @@ class Inference:
     def get_item_ids(self):
         return self.model.ensemble.get_item_ids()
 
-
+logger.add("/logs/debug.log", format="{time} {level} {message}", level="DEBUG")
 app = FastAPI()
 inference = Inference()
 
