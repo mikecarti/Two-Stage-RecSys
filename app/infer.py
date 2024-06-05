@@ -18,6 +18,10 @@ class PredictResponse(BaseModel):
 class TrainResponse(BaseModel):
     success: int
 
+class ItemsResponse(BaseModel):
+    items: List[int]
+
+
 
 class Inference:
     def __init__(self):
@@ -70,6 +74,9 @@ def predict(request: PredictRequest) -> PredictResponse:
         raise HTTPException(status_code=400, detail="Model is not trained yet.")
     return PredictResponse(predictions=predictions.tolist())
 
+@app.post("/get_items", response_model=ItemsResponse)
+def get_items() -> ItemsResponse:
+    return ItemsResponse(items=inference.get_item_ids())
 
 # if __name__ == "__main__":
 #     import uvicorn

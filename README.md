@@ -13,7 +13,12 @@ docker rm recsys
 
 ```commandline
 docker build -t recsys .
-docker run --name recsys -p 80:80 recsys
+docker run -it \
+     --name recsys \
+     --mount type=bind,source="$(pwd)"/app/model_files,target=/app/model_files \
+     -p 80:80 \
+     recsys:latest
+
 docker exec -it recsys /bin/bash
 ```
 
