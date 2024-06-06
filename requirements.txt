@@ -12,7 +12,6 @@ threadpoolctl==3.5.0
 joblib==1.4.2
 python-dateutil==2.9.0.post0
 certifi==2024.2.2
-requests==2.32.2
 urllib3==2.2.1
 six==1.16.0
 idna==3.7
@@ -33,3 +32,4 @@ kiwisolver==1.4.5
 pydantic==2.7.1
 fastapi==0.111.0
 faiss-cpu
+requests

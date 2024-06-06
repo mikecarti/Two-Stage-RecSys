@@ -1,8 +1,6 @@
-import sys
-
+import numpy as np
 from fastapi import FastAPI, HTTPException
 from loguru import logger
-import numpy as np
 
 from app.dtype import PredictRequest, PredictResponse, TrainResponse, ItemsResponse
 from app.inference import Inference
@@ -28,11 +26,11 @@ def predict(request: PredictRequest) -> PredictResponse:
     return PredictResponse(predictions=predictions.tolist())
 
 
-@app.post("/get_items", response_model=ItemsResponse)
+@app.get("/get_items", response_model=ItemsResponse)
 def get_items() -> ItemsResponse:
     return ItemsResponse(items=inference.get_item_ids())
 
-# if __name__ == "__main__":
-#     import uvicorn
-#
-#     uvicorn.run(app, host="0.0.0.0", port=8000)
+if __name__ == "__main__":
+    import uvicorn
+
+    uvicorn.run(app, host="0.0.0.0", port=8000)

@@ -1,9 +1,11 @@
 from typing import Optional
 
-from app.models.two_stage import TwoStageModel
-from app.train import train as train_2stage
 import numpy as np
 from loguru import logger
+
+from app.models.two_stage import TwoStageModel
+from app.train import train as train_2stage
+
 
 class Inference:
     def __init__(self):
