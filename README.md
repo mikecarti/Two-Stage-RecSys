@@ -1,10 +1,13 @@
 # Two-Stage-RecSys
 A Two Stage Recommender System for Retail. (LFM, KNN, CatBoost and Other Heuristics)
 
+## Prerequisites
+Install docker and nvidia-container-runtime, then run in the shell:
+```commandline
+pip install requests streamlit
+```
 
 ## Running:
-Install docker and nvidia-container-runtime, then run in the shell:
-
 ```commandline
 # opional
 docker stop recsys
@@ -19,6 +22,8 @@ docker run -it \
      --mount type=bind,source="$(pwd)"/app/logs,target=/app/logs \
      -p 80:80 \
      recsys:latest
+     
+streamlit run ui.py 
 ```
 
 
