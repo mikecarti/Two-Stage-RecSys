@@ -6,7 +6,7 @@ class PredictRequest(BaseModel):
 
 
 class PredictResponse(BaseModel):
-    predictions: List[float]
+    predictions: List[List[float]]
 
 
 class TrainResponse(BaseModel):
